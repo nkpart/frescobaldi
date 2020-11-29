@@ -49,6 +49,9 @@ def rhythm_dot(cursor):
 def rhythm_undot(cursor):
     ly.rhythm.rhythm_undot(lydocument.cursor(cursor))
 
+def rhythm_dotcut(cursor):
+    ly_rhythm_dotcut(lydocument.cursor(cursor))
+
 def rhythm_remove_scaling(cursor):
     ly.rhythm.rhythm_remove_scaling(lydocument.cursor(cursor))
 
@@ -86,3 +89,30 @@ def rhythm_copy(cursor):
 def rhythm_paste(cursor):
     ly.rhythm.rhythm_overwrite(lydocument.cursor(cursor), _clipboard)
 
+def ly_rhythm_dotcut(cursor):
+    """alternate duration dot and halve"""
+    with cursor.document as d:
+        for (idx, item) in enumerate(ly.rhythm.music_items(cursor)):
+            if idx % 2 == 0:
+                do_dot(item, d)
+            else:
+                do_halve(item, d)
+
+def do_halve(item, d):
+  durations = ly.rhythm.durations
+  for token in item.dur_tokens:
+      if isinstance(token, ly.lex.lilypond.Length):
+          try:
+              i = durations.index(token)
+          except ValueError:
+              pass
+          else:
+              if i < len(durations) - 1:
+                  d[token.pos:token.end] = durations[i + 1]
+          break
+
+def do_dot(item, d):
+  for token in item.dur_tokens:
+      if isinstance(token, ly.lex.lilypond.Length):
+          d[token.end:token.end] = "."
+          break

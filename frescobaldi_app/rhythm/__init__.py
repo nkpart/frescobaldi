@@ -40,6 +40,7 @@ class Rhythm(plugin.MainWindowPlugin):
         ac.rhythm_halve.triggered.connect(self.rhythm_halve)
         ac.rhythm_dot.triggered.connect(self.rhythm_dot)
         ac.rhythm_undot.triggered.connect(self.rhythm_undot)
+        ac.rhythm_dotcut.triggered.connect(self.rhythm_dotcut)
         ac.rhythm_remove_scaling.triggered.connect(self.rhythm_remove_scaling)
         ac.rhythm_remove_fraction_scaling.triggered.connect(self.rhythm_remove_fraction_scaling)
         ac.rhythm_remove.triggered.connect(self.rhythm_remove)
@@ -56,6 +57,7 @@ class Rhythm(plugin.MainWindowPlugin):
         ac.rhythm_halve.setEnabled(selection)
         ac.rhythm_dot.setEnabled(selection)
         ac.rhythm_undot.setEnabled(selection)
+        ac.rhythm_dotcut.setEnabled(selection)
         ac.rhythm_remove_scaling.setEnabled(selection)
         ac.rhythm_remove_fraction_scaling.setEnabled(selection)
         ac.rhythm_remove.setEnabled(selection)
@@ -85,6 +87,11 @@ class Rhythm(plugin.MainWindowPlugin):
         cursor = self.mainwindow().textCursor()
         from . import rhythm
         rhythm.rhythm_undot(cursor)
+
+    def rhythm_dotcut(self):
+        cursor = self.mainwindow().textCursor()
+        from . import rhythm
+        rhythm.rhythm_dotcut(cursor)
 
     def rhythm_remove_scaling(self):
         cursor = self.mainwindow().textCursor()
@@ -139,6 +146,7 @@ class Actions(actioncollection.ActionCollection):
         self.rhythm_halve = QAction(parent)
         self.rhythm_dot = QAction(parent)
         self.rhythm_undot = QAction(parent)
+        self.rhythm_dotcut = QAction(parent)
         self.rhythm_remove_scaling = QAction(parent)
         self.rhythm_remove_fraction_scaling = QAction(parent)
         self.rhythm_remove = QAction(parent)
@@ -162,6 +170,9 @@ class Actions(actioncollection.ActionCollection):
         self.rhythm_undot.setText(_("&Undot durations"))
         self.rhythm_undot.setToolTip(_(
             "Remove one dot from all the durations in the selection."))
+        self.rhythm_dotcut.setText(_("&Dot-Cut durations"))
+        self.rhythm_dotcut.setToolTip(_(
+            "Alternate adding a dot and halving duration."))
         self.rhythm_remove_scaling.setText(_("Remove &scaling"))
         self.rhythm_remove_scaling.setToolTip(_(
             "Remove all scaling (*n, *n/m) from the durations in the selection."))
